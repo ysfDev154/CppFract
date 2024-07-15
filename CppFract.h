@@ -10,7 +10,7 @@ private:
 public:
 	CppFract(const ll& _n, const ll& _d):n(_n),d(_d) {}
 
-	void Show() const {
-		printf("CppFract : (%lld/%lld)\n",n,d);
+	void Show() const { //TODO '<<' iostream operator instead
+		printf("CppFract : (%lld/%lld)\n",n,d); 
 	}
 };
