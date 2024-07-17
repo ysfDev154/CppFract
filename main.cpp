@@ -6,10 +6,13 @@ using namespace std;
 int main(void) {
 
 	try {
-		CppFract f1(1,3), f2(154,0);
+		CppFract f1(1,3);
+		//CppFract f2(154,0);
 		CppFract(5,10).Show();
+		
+		CppFract f3(f1);
 
-		cout << std::endl << f1 << endl;
+		cout << std::endl << f1 << ", " << f3 << endl;
 	}
 	
 	catch (const std::invalid_argument& e) {
