@@ -1,16 +1,29 @@
-#include <stdio.h>
+#include <iostream>
+#include <stdexcept>
 
 class CppFract {
 
-typedef long long ll;
-
 private:
+	typedef long long ll;
 	ll n,d;
 
 public:
-	CppFract(const ll& _n, const ll& _d):n(_n),d(_d) {}
+	CppFract(const ll& _n, const ll& _d):n(_n),d(_d) {
+		if (!d) {
+			throw std::invalid_argument("Denominator CANNOT be zero.");
+		}
+	} 
 
-	void Show() const { //TODO '<<' iostream operator instead
-		printf("CppFract : (%lld/%lld)\n",n,d); 
+	void Show() const {
+		Show(std::cout);
 	}
+
+	std::ostream& Show(std::ostream& os) const {
+		return os << n << '/' << d;
+	}
+
 };
+
+inline std::ostream& operator<<(std::ostream& os, const CppFract& f) {
+	return f.Show(os);
+}
