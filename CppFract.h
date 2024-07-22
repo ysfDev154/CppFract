@@ -1,31 +1,46 @@
 #include <iostream>
 #include <stdexcept>
 
+long long PGCD(long long a, long long b);
+
 class CppFract {
-
-// TODO normalise method
-// TODO comment
-// TODO test all the features
-
-      /*
-
- /!\ [WIP] /!\ 
-(not tested yet)
-      
-      */
 
 private:
 	typedef long long ll;
 	ll n,d;
+	
+	void Norm() {
+		ll oldPGCD;
+		if (d < 0) {
+			n = -n;
+			d = -d;
+		} 
+		if (n == d) {
+			n = 1;
+			d = 1;
+		}
+		oldPGCD = PGCD(n,d);
+		if (oldPGCD<0) oldPGCD = -oldPGCD;
+		if (oldPGCD != 1) {
+			n = n / oldPGCD;
+			d = d / oldPGCD;
+		}	
+	}
 
 public:
+
+	// Constructor
 	CppFract(const ll& _n=0, const ll& _d=1):n(_n),d(_d) {
 		if (!d) {
 			throw std::invalid_argument("Denominator CANNOT be zero.");
 		}
-		//TODO normalise
+		Norm();
 	} 
-
+	
+	
+	
+	
+	// Methods that prints in the console
 	void Show() const {
 		Show(std::cout);
 	}
@@ -37,24 +52,25 @@ public:
 	
 	
 	
+	// Compound assignments operators
 	CppFract& operator +=(const CppFract& f) {
 		n = n*f.d + f.n*d;
 		d *= f.d;
-		//TODO normalise
+		Norm();
 		return *this;
 	}
 	
 	CppFract& operator -=(const CppFract& f) {
 		n = n*f.d - f.n*d;
 		d *= f.d;
-		//TODO normalise
+		Norm();
 		return *this;
 	}
 	
 	CppFract& operator *=(const CppFract& f) {
 		n *= f.n;
 		d *= f.d;
-		//TODO normalise
+		Norm();
 		return *this;
 	}
 	
@@ -64,13 +80,14 @@ public:
 		}
 		n *= f.d;
 		d *= f.n;
-		//TODO normalise
+		Norm();
 		return *this;
 	}
 	
 	
 	
 	
+	// Arithmetic operators
 	CppFract operator +(const CppFract& f) const {
 		return CppFract(*this)+=f;
 	}
@@ -90,6 +107,7 @@ public:
 	
 	
 	
+	// Unary operators
 	CppFract operator +() const {
 		return CppFract(n,d);
 	}
@@ -98,19 +116,21 @@ public:
 		return CppFract(-n,d);
 	}
 	
-	
-	
-	
+	// Returns the inverse of the fraction without modifying *this
 	CppFract operator !() const {
 		if (!n) {
 			throw std::invalid_argument("Denominator CANNOT be zero.");
-		} else {
-			return CppFract(d,n);
 		}
+		return CppFract(d,n);
+
 	}
 	
+	// Returns the inverse and modifies *this
 	CppFract operator ~() {
-		int temp = n;
+		if (!n) {
+			throw std::invalid_argument("Denominator CANNOT be zero.");
+		}
+		ll temp = n;
 		n = d;
 		d = temp;
 		return *this;
@@ -119,6 +139,7 @@ public:
 	
 	
 	
+	// comparaisons
 	bool operator ==(const CppFract& f) const {
 		return (n == f.n) && (d == f.d);
 	}
@@ -140,12 +161,13 @@ public:
 	}
 	
 	bool operator !=(const CppFract& f) const {
-		return (n != f.n) && (d != f.d);
+		return !((*this) == f);
 	}
 	
-
 	
 	
+	
+	// PRE/POST in/decrement operators
 	CppFract& operator ++() {
 		return (*this)+=1;
 	}
@@ -169,6 +191,7 @@ public:
 
 };
 
+// stdio '<<' operator
 inline std::ostream& operator<<(std::ostream& os, const CppFract& f) {
 	return f.Show(os);
 }
